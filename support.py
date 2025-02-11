@@ -18,6 +18,15 @@ def connect_db():
         '''CREATE TABLE IF NOT EXISTS user_expenses (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, pdate DATE NOT 
         NULL, expense VARCHAR(10) NOT NULL, amount INTEGER NOT NULL, pdescription VARCHAR(50), FOREIGN KEY (user_id) 
         REFERENCES user_login(user_id))''')
+    cur.execute(
+        '''CREATE TABLE IF NOT EXISTS transactions (id INTEGER PRIMARY KEY AUTOINCREMENT,
+            group_id INTEGER,
+            user_id INTEGER,
+            type TEXT CHECK(type IN ('contribution', 'withdrawal')) NOT NULL,
+            amount DECIMAL(10,2) NOT NULL,
+            transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (group_id) REFERENCES groups(id),
+            FOREIGN KEY (user_id) REFERENCES users(id))''')
     conn.commit()
     return conn, cur
 
