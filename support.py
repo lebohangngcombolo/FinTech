@@ -58,31 +58,31 @@ def connect_db():
         
     cur.execute(
          '''INSERT INTO users_login (user_id, username, email, password_hash) 
-        VALUES ('User 1', 'John Doe', 'johndoe@example.com', 'hashed_password_here');''')
+        VALUES ('User 1', 'John Doe', 'johndoe@example.com', 'hashed_password_here')''')
     
     cur.execute(
-         '''INSERT INTO transactions (user_id, amount, transaction_date) 
-    VALUES ('User 1', 100.00, '2025-02-12');''')
+         '''INSERT INTO transactions (id, group_id, user_id, type, amount, transaction_date) 
+    VALUES (1, 'group 1', 'User 1', 'contribution', 100.00, '2025-02-12')''')
     
     cur.execute(
-    '''INSERT INTO contributions (user_id, group_id, amount, transaction_date) 
-    VALUES ('User 1', 'Group 1', 100.00, '2025-02-12');''')
-    
+    '''INSERT INTO contributions (id, user_id, group_id, amount, contribution_date) 
+    VALUES (1, 'User 1', 'Group 1', 100.00, '2025-02-12')''')
+
     cur.execute(
         '''INSERT INTO withdrawals (id, user_id, group_id, amount, transaction_date) 
-        VALUES (1, 'User 1', 1, 100.00, '2025-02-12');''')
+        VALUES (1, 'User 1', 1, 100.00, '2025-02-12')''')
     
     cur.execute(
-    '''INSERT INTO groups (user_id, name, discription, created_at) 
-    VALUES (1, 'Group 1', 'Discription 1', '2025-02-12');''')
+    '''INSERT INTO groups (id, user_id, name, discription, created_at) 
+    VALUES (1, 'User 1', 'Group 1', 'Discription 1', '2025-02-12')''')
     
     cur.execute(
-    '''INSERT INTO group_members (user_id, group_id, role, joined_at) 
-    VALUES ('User 1', 'Group 1', 'Admin', '2025-02-12');''')
+    '''INSERT INTO group_members (id, user_id, group_id, role, joined_at) 
+    VALUES (1, 'User 1', 'Group 1', 'Admin', '2025-02-12')''')
     
     cur.execute(
-    '''INSERT INTO user_expenses (user_id, pdate, expense, amount) 
-    VALUES ('User 1', '2025-02-12', 'Expense 1', 100.00,);''')
+    '''INSERT INTO user_expenses (id, user_id, pdate, expense, amount, pdescription) 
+    VALUES (1, 'User 1', '2025-02-12', 'Expense 1', 100.00, 'Discription 1')''')
         
     
     conn.commit()
