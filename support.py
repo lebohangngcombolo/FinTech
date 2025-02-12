@@ -73,8 +73,8 @@ def connect_db():
         VALUES (1, 'User 1', 1, 100.00, '2025-02-12')''')
     
     cur.execute(
-    '''INSERT INTO groups (id, user_id, name, discription, created_at) 
-    VALUES (1, 'User 1', 'Group 1', 'Discription 1', '2025-02-12')''')
+    '''INSERT INTO groups (id, user_id, name, description, created_at) 
+    VALUES (1, 'User 1', 'Group 1', 'Description 1', '2025-02-12')''')
     
     cur.execute(
     '''INSERT INTO group_members (id, user_id, group_id, role, joined_at) 
