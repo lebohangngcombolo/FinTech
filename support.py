@@ -27,6 +27,36 @@ def connect_db():
             transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (group_id) REFERENCES groups(id),
             FOREIGN KEY (user_id) REFERENCES users(id))''')
+    cur.execute(
+        '''CREATE TABLE IF NOT EXISTS contributions (id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        group_id INTEGER,
+        amount DECIMAL(10,2) NOT NULL,
+        contribution_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id),
+        FOREIGN KEY (group_id) REFERENCES groups(id)))''')
+    
+    
+    cur.execute(
+        '''CREATE TABLE IF NOT EXISTS withdrawals (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        group_id INTEGER,
+        amount DECIMAL(10,2) NOT NULL,
+        withdrawal_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id),
+        FOREIGN KEY (group_id) REFERENCES groups(id)))''')
+    
+    cur.execute(
+        '''CREATE TABLE IF NOT EXISTS groups (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        description TEXT,
+        created_by INTEGER,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (created_by) REFERENCES users(id)))''')
+        
+    
     conn.commit()
     return conn, cur
 
