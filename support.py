@@ -11,49 +11,52 @@ import json
 def connect_db():
     conn = sqlite3.connect("expense.db")
     cur = conn.cursor()
-    cur.execute(
-        '''CREATE TABLE IF NOT EXISTS user_login (user_id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(30) NOT NULL, 
-        email VARCHAR(30) NOT NULL UNIQUE, password VARCHAR(20) NOT NULL)''')
-    cur.execute(
-        '''CREATE TABLE IF NOT EXISTS user_expenses (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, pdate DATE NOT 
-        NULL, expense VARCHAR(10) NOT NULL, amount INTEGER NOT NULL, pdescription VARCHAR(50), FOREIGN KEY (user_id) 
-        REFERENCES user_login(user_id))''')
-    cur.execute(
-        '''CREATE TABLE IF NOT EXISTS transactions (id INTEGER PRIMARY KEY AUTOINCREMENT,
-            group_id INTEGER,
-            user_id INTEGER,
-            type TEXT CHECK(type IN ('contribution', 'withdrawal')) NOT NULL,
-            amount DECIMAL(10,2) NOT NULL,
-            transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (group_id) REFERENCES groups(id),
-            FOREIGN KEY (user_id) REFERENCES users(id))''')
-    cur.execute(
-        '''CREATE TABLE IF NOT EXISTS contributions (id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
+    
+    # User table
+    cur.execute('''CREATE TABLE IF NOT EXISTS user_login (
+        user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username VARCHAR(30) NOT NULL, 
+        email VARCHAR(30) NOT NULL UNIQUE,
+        password VARCHAR(100) NOT NULL)''')
+
+    # Expenses table
+    cur.execute('''CREATE TABLE IF NOT EXISTS user_expenses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        pdate DATE NOT NULL,
+        expense VARCHAR(10) NOT NULL,
+        amount INTEGER NOT NULL,
+        pdescription VARCHAR(50),
+        FOREIGN KEY (user_id) REFERENCES user_login(user_id))''')
+
+    # Transactions table
+    cur.execute('''CREATE TABLE IF NOT EXISTS transactions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         group_id INTEGER,
+        user_id INTEGER,
+        type TEXT CHECK(type IN ('contribution', 'withdrawal')) NOT NULL,
         amount DECIMAL(10,2) NOT NULL,
-        contribution_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id),
-        FOREIGN KEY (group_id) REFERENCES groups(id)))''')
-    
-    
-    cur.execute(
-        '''CREATE TABLE IF NOT EXISTS withdrawals (
+        transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES user_login(user_id))''')
+
+    # Contributions table
+    cur.execute('''CREATE TABLE IF NOT EXISTS contributions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
         group_id INTEGER,
         amount DECIMAL(10,2) NOT NULL,
-        withdrawal_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id),
-        FOREIGN KEY (group_id) REFERENCES groups(id)))''')
-    
-    cur.execute(
-        '''CREATE TABLE IF NOT EXISTS groups (
+        contribution_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES user_login(user_id),
+        FOREIGN KEY (group_id) REFERENCES groups(id))''')
+
+    # Groups table
+    cur.execute('''CREATE TABLE IF NOT EXISTS groups (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         description TEXT,
         created_by INTEGER,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+<<<<<<< HEAD
         FOREIGN KEY (created_by) REFERENCES users(id)))''')
         
     cur.execute(
@@ -84,6 +87,9 @@ def connect_db():
     '''INSERT INTO user_expenses (id, user_id, pdate, expense, amount, pdescription) 
     VALUES (1, 'User 1', '2025-02-12', 'Expense 1', 100.00, 'Discription 1')''')
         
+=======
+        FOREIGN KEY (created_by) REFERENCES user_login(user_id))''')
+>>>>>>> 7d7049d (LoginForm)
     
     conn.commit()
     return conn, cur
